@@ -12,7 +12,9 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SigninImport } from './routes/signin'
+import { Route as WorkspaceImport } from './routes/_workspace'
 import { Route as IndexImport } from './routes/index'
+import { Route as WorkspaceWorkspaceWorkspaceIdImport } from './routes/_workspace/workspace/$workspaceId'
 
 // Create/Update Routes
 
@@ -22,11 +24,23 @@ const SigninRoute = SigninImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const WorkspaceRoute = WorkspaceImport.update({
+  id: '/_workspace',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const WorkspaceWorkspaceWorkspaceIdRoute =
+  WorkspaceWorkspaceWorkspaceIdImport.update({
+    id: '/workspace/$workspaceId',
+    path: '/workspace/$workspaceId',
+    getParentRoute: () => WorkspaceRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -39,6 +53,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/_workspace': {
+      id: '/_workspace'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof WorkspaceImport
+      parentRoute: typeof rootRoute
+    }
     '/signin': {
       id: '/signin'
       path: '/signin'
@@ -46,43 +67,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SigninImport
       parentRoute: typeof rootRoute
     }
+    '/_workspace/workspace/$workspaceId': {
+      id: '/_workspace/workspace/$workspaceId'
+      path: '/workspace/$workspaceId'
+      fullPath: '/workspace/$workspaceId'
+      preLoaderRoute: typeof WorkspaceWorkspaceWorkspaceIdImport
+      parentRoute: typeof WorkspaceImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface WorkspaceRouteChildren {
+  WorkspaceWorkspaceWorkspaceIdRoute: typeof WorkspaceWorkspaceWorkspaceIdRoute
+}
+
+const WorkspaceRouteChildren: WorkspaceRouteChildren = {
+  WorkspaceWorkspaceWorkspaceIdRoute: WorkspaceWorkspaceWorkspaceIdRoute,
+}
+
+const WorkspaceRouteWithChildren = WorkspaceRoute._addFileChildren(
+  WorkspaceRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '': typeof WorkspaceRouteWithChildren
   '/signin': typeof SigninRoute
+  '/workspace/$workspaceId': typeof WorkspaceWorkspaceWorkspaceIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '': typeof WorkspaceRouteWithChildren
   '/signin': typeof SigninRoute
+  '/workspace/$workspaceId': typeof WorkspaceWorkspaceWorkspaceIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/_workspace': typeof WorkspaceRouteWithChildren
   '/signin': typeof SigninRoute
+  '/_workspace/workspace/$workspaceId': typeof WorkspaceWorkspaceWorkspaceIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/signin'
+  fullPaths: '/' | '' | '/signin' | '/workspace/$workspaceId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/signin'
-  id: '__root__' | '/' | '/signin'
+  to: '/' | '' | '/signin' | '/workspace/$workspaceId'
+  id:
+    | '__root__'
+    | '/'
+    | '/_workspace'
+    | '/signin'
+    | '/_workspace/workspace/$workspaceId'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  WorkspaceRoute: typeof WorkspaceRouteWithChildren
   SigninRoute: typeof SigninRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  WorkspaceRoute: WorkspaceRouteWithChildren,
   SigninRoute: SigninRoute,
 }
 
@@ -97,14 +150,25 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/_workspace",
         "/signin"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
+    "/_workspace": {
+      "filePath": "_workspace.tsx",
+      "children": [
+        "/_workspace/workspace/$workspaceId"
+      ]
+    },
     "/signin": {
       "filePath": "signin.tsx"
+    },
+    "/_workspace/workspace/$workspaceId": {
+      "filePath": "_workspace/workspace/$workspaceId.tsx",
+      "parent": "/_workspace"
     }
   }
 }
