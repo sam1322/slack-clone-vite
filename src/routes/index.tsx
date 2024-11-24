@@ -1,10 +1,30 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 // import reactLogo from "/assets/react.svg";
 import "@/App.css";
 
+// Create a middleware function for auth protection
+const authMiddleware = {
+  beforeLoad: ({ context, location }) => {
+    // Get auth state - in real app, you'd use your auth hook/context
+    // const isAuthenticated = useAuth().isAuthenticated
+    const isAuthenticated = false;
+
+    if (!isAuthenticated) {
+      // Redirect to login page with return URL
+      throw redirect({
+        to: "/signin",
+        search: {
+          returnTo: location.href,
+        },
+      });
+    }
+  },
+};
+
 export const Route = createFileRoute("/")({
   component: RouteComponent,
+  beforeLoad: authMiddleware.beforeLoad,
 });
 
 function RouteComponent() {
