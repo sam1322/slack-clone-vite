@@ -1,3 +1,4 @@
+import Sidebar from "@/components/sidebar/Sidebar";
 import Toolbar from "@/components/Toolbar";
 import {
   ResizableHandle,
@@ -16,7 +17,7 @@ function RouteComponent() {
     <div className="h-full">
       <Toolbar />
       <div className="flex h-[calc(100vh-40px)]">
-        {/* <Sidebar /> */}
+        <Sidebar />
         <ResizablePanelGroup
           direction="horizontal"
           autoSaveId="ca-workspace-layout"
