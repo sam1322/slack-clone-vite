@@ -1,4 +1,5 @@
 import Sidebar from "@/components/sidebar/Sidebar";
+import { WorkspaceSidebar } from "@/components/sidebar/WorkspaceSidebar";
 import Toolbar from "@/components/Toolbar";
 import {
   ResizableHandle,
@@ -13,6 +14,7 @@ export const Route = createFileRoute("/_workspace")({
 });
 
 function RouteComponent() {
+  const showPanel = true
   return (
     <div className="h-full">
       <Toolbar />
@@ -27,7 +29,7 @@ function RouteComponent() {
             defaultSize={20}
             className="bg-[#5E2C5F]"
           >
-            {/* <WorkspaceSidebar /> */}
+            <WorkspaceSidebar />
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel minSize={20} defaultSize={80}>
