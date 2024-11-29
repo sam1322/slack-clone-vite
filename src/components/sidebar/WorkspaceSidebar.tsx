@@ -6,6 +6,10 @@ import {
   SendHorizontal,
 } from "lucide-react";
 import { WorkspaceHeader } from "../workspace/WorkspaceHeader";
+import { SidebarItem } from "./SidebarItem";
+import { UserItem } from "./UserItem";
+import { WorkspaceSection } from "./WorkspaceSection";
+import { useState } from "react";
 
 //   import { useGetMembers } from "@/features/members/api/use-get-members";
 //   import { useCurrentMember } from "@/features/members/api/use-current-member";
@@ -45,13 +49,43 @@ export const WorkspaceSidebar = () => {
   //   workspaceId,
   // });
 
-  // const memberId = 1,
-  //   channelId = 2,
-  //   workspaceId = 3;
+  const memberId = 1,
+    channelId = 2,
+    workspaceId = 3;
   const workspaceLoading = false;
   const memberLoading = false;
   const workspace = { name: "Saminem" };
   const member = { role: "admin" };
+
+  const channels = [
+    {
+      _id: 1,
+      name: "Channel 1",
+    },
+    {
+      _id: 2,
+      name: "Channel 2",
+    },
+  ];
+  const members = [
+    {
+      _id: 1,
+      name: "Member 1",
+      user: {
+        name: "James",
+        image:"https://github.com/shadcn.png"
+      },
+    },
+    {
+      _id: 2,
+      name: "Member 2",
+      user: {
+        name: "Bond",
+      },
+    },
+  ];
+
+  const [open, setOpen] = useState(false);
 
   if (workspaceLoading || memberLoading) {
     return (
@@ -76,11 +110,11 @@ export const WorkspaceSidebar = () => {
         workspace={workspace}
         isAdmin={member.role === "admin"}
       />
-      {/* <div className="flex flex-col px-2 mt-3">
+      <div className="flex flex-col px-2 mt-3">
         <SidebarItem id="threads" label="Threads" icon={MessageSquareText} />
         <SidebarItem id="drafts" label="Drafts & Sent" icon={SendHorizontal} />
-      </div> */}
-      {/* <WorkspaceSection
+      </div>
+      <WorkspaceSection
         label="Channels"
         hint="New channel"
         onNew={member.role === "admin" ? () => setOpen(true) : undefined}
@@ -109,7 +143,7 @@ export const WorkspaceSidebar = () => {
             variant={item._id === memberId ? "active" : "default"}
           />
         ))}
-      </WorkspaceSection> */}
+      </WorkspaceSection>
     </div>
   );
 };
